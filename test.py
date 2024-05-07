@@ -1,8 +1,25 @@
 import pandas as pd
+from datetime import datetime , timedelta
+#date de début et de fin ////////////////////////////
+#date_debut= datetime(2024, 04,01)
+#date_fin= datetime(2024,04,25)
+# un pas d'un jour ///////////////////////
+#step= timedelta(days=1)
+# boucle à travers les dates////////////////////////////
+#date_courrante= date_debut
+#while date_courrante <= date_fin:
+    #print(date_courrante.strftime('%y-%m-%d'))
+    #date_courrante += step
+
+
 
 # Lecture
-mb5b = pd.read_excel("mb5b.xlsx")
-mb51 = pd.read_excel("mb51.xlsx")
+file_path= r'C:\Users\met00552\.vscode\extensions\Test/mb5b.xlsx'
+mb5b = pd.read_excel(file_path)
+file_path= r'C:\Users\met00552\.vscode\extensions\Test/mb51.xlsx'
+mb51 = pd.read_excel(file_path)
+#mb5b = pd.read_excel("mb5b.xlsx")
+#mb51 = pd.read_excel("mb51.xlsx")
 mb51["Code mouvement"] = mb51["Code mouvement"].astype(str)
 
 print (mb5b.columns)
@@ -20,7 +37,7 @@ farin_df = pd.read_excel("Farine.xlsx")
 print(farin_df.head())
 print(farin_df.columns)
 StockInitiale = farin_df["Stock initiale"].sum()
-print("Le stock initial est :", StockInitiale) #2em col
+print("Le stock initial est :",StockInitiale) #2em col
 
 #Traitement production mb51 
 mb51.dropna(subset=["Désignation article"], inplace=True)
@@ -46,21 +63,21 @@ ventemb51 = mb51[mb51["Code mouvement"].str.contains(pattern2, case=False)]
 ventemb51["Quantité"] = ventemb51["Quantité"]
 resultat4 = ("ventemb51.xlsx")
 ventemb51.to_excel(resultat4, index=False)
-print("vente file has been created", resultat4)
+print("vente file has been created",resultat4)
 
 qtevente_df = pd.read_excel("ventemb51.xlsx")
 Vente = qtevente_df["Quantité"].sum()
-print("La quantité des ventes est :", Vente) # 4eme col
+print("La quantité des ventes est :",Vente) # 4eme col
 #Traitement  stock total 
 
 Qtetotal = StockProd + StockInitiale
 print("le stock totale est:",Qtetotal) #la 3em col
 #Traitement  stock final
-Qtefinal= Qtetotal - Vente
+Qtefinal= Qtetotal -(-Vente)
 print("le stock final calculé est:",Qtefinal) # la 5 eme col
 # récupération mb5b stock final
 StockFinale = farin_df["Sold finale"].sum()
-print("Le stock finale système est :", StockFinale)
+print("Le stock finale système est :",StockFinale)
 
 Ma_Liste = []
 Ma_Liste.append ({
@@ -68,8 +85,8 @@ Ma_Liste.append ({
  "Stock initiale" : StockInitiale ,
  "Stock Totale" : Qtetotal,
  "Quantité des ventes" : Vente,
- "Stock final" : Qtefinal,
-
+ "Stock final calculé" : Qtefinal,
+ "Stock final système" : StockFinale,
 })
 result_df = pd.DataFrame(Ma_Liste)
 resultatFile = "final result.xlsx"
